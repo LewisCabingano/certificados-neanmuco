@@ -2,21 +2,104 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Academia Neanmuco - Validação de Certificados</title>
+  <title>Academia - Certificados</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 0; }
-    .container { max-width: 700px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-    h1 { text-align: center; color: #2c3e50; }
-    p { text-align: center; font-size: 16px; color: #555; }
-    .footer { text-align: center; margin-top: 30px; font-size: 14px; color: #777; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 600px; margin: auto; }
+    .hidden { display: none; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 15px; }
+    #qrcode { margin-top: 20px; }
+    .certificado { border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Validação de Certificados</h1>
-    <p>Bem-vindo ao sistema oficial da Academia Neanmuco.</p>
-    <p>Use o QR Code no seu certificado para acessar a página individual.</p>
-    <div class="footer">Academia Neanmuco © 2025</div>
+    <h1>Academia de Formação Profissional</h1>
+
+    <!-- Login -->
+    <div id="login">
+      <h2>Login</h2>
+      <label>Email:</label>
+      <input type="email" id="email">
+      <label>Senha:</label>
+      <input type="password" id="senha">
+      <button onclick="fazerLogin()">Entrar</button>
+    </div>
+
+    <!-- Formulário de Certificado -->
+    <div id="formCertificado" class="hidden">
+      <h2>Criar Novo Certificado</h2>
+      <label>Academia:</label>
+      <input type="text" id="academia" value="ACADEMIA NEANMUCO">
+      <label>NIF:</label>
+      <input type="text" id="nif" value="5001643088">
+      <label>Formando:</label>
+      <input type="text" id="formando" value="Júnior Angelino Sebastião">
+      <label>BI:</label>
+      <input type="text" id="bi" value="003916325ZE032">
+      <label>Curso:</label>
+      <input type="text" id="curso" value="Grua Móvel">
+      <label>Nota Final:</label>
+      <input type="text" id="nota" value="18">
+      <label>Data:</label>
+      <input type="text" id="data" value="01/01/2023 - 01/02/2023">
+      <button onclick="gerarCertificado()">Gerar Certificado</button>
+    </div>
+
+    <!-- Certificado Gerado -->
+    <div id="certificado" class="hidden">
+      <h2>Certificado Gerado</h2>
+      <div class="certificado" id="dadosCertificado"></div>
+      <div id="qrcode"></div>
+    </div>
   </div>
+
+  <script>
+    function fazerLogin() {
+      // Simples validação (não é seguro, apenas exemplo)
+      let email = document.getElementById("email").value;
+      let senha = document.getElementById("senha").value;
+      if(email && senha) {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("formCertificado").classList.remove("hidden");
+      } else {
+        alert("Preencha email e senha!");
+      }
+    }
+
+    function gerarCertificado() {
+      let academia = document.getElementById("academia").value;
+      let nif = document.getElementById("nif").value;
+      let formando = document.getElementById("formando").value;
+      let bi = document.getElementById("bi").value;
+      let curso = document.getElementById("curso").value;
+      let nota = document.getElementById("nota").value;
+      let data = document.getElementById("data").value;
+
+      let dados = `
+        <strong>${academia}</strong><br>
+        NIF: ${nif}<br>
+        Formando: ${formando}<br>
+        BI: ${bi}<br>
+        Curso: ${curso}<br>
+        Nota Final: ${nota}<br>
+        Data: ${data}
+      `;
+
+      document.getElementById("dadosCertificado").innerHTML = dados;
+      document.getElementById("certificado").classList.remove("hidden");
+
+      // Gera QR Code com os dados
+      document.getElementById("qrcode").innerHTML = "";
+      new QRCode(document.getElementById("qrcode"), {
+        text: dados,
+        width: 200,
+        height: 200
+      });
+    }
+  </script>
 </body>
 </html>
